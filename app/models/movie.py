@@ -8,6 +8,6 @@ class Movie:
         self.id = id
         self.title = title
         self.overview = overview
-        self.image = 'https://developers.themoviedb.org/3/getting-started/images'+image
+        self.image = image
         self.vote_average = vote_average
         self.vote_count = vote_count
