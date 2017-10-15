@@ -1,0 +1,84 @@
+/*Animate Error message*/
+
+.errorMessage {
+    color: #B03A2E;
+    position: relative;
+    /* Chrome and Safari*/
+/*    -webkit-animation-name: error-animation;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;*/
+    /*Firefox*/
+/*    -moz-animation-name: error-animation;
+    -moz-animation-duration: 4s;
+    -moz-animation-iteration-count: infinite;*/
+    /*Opera*/
+/*    -o-animation-name: error-animation;
+    -o-animation-duration: 4s;
+    -o-animation-iteration-count: infinite;
+    animation-name: error-animation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;*/
+}
+
+
+/*Chrome and Safari*/
+
+/*@-webkit-keyframes error-animation {
+    0% {
+    color: $#B03A2E;
+    }
+    25% {
+    color: #B03A2E;
+    }
+    50% {
+    color: #76448A;
+    }
+    75% {
+    color: #6C3483;
+    }
+    100% {
+    color: #21618C;
+    }
+}*/
+
+
+/*Fifefox*/
+
+/*@-moz-keyframes error-animation {
+    0% {
+    color: #B03A2E;
+    }
+    25% {
+    color: #B03A2E;
+    }
+    50% {
+    color: #76448A;
+    }
+    75% {
+    color: #6C3483;
+    }
+    100% {
+    color: #21618C;
+    }
+}*/
+
+
+/*Opera*/
+
+/*@-o-keyframes error-animation {
+    0% {
+    color: #B03A2E;
+    }
+    25% {
+    color: #B03A2E;
+    }
+    50% {
+    color: #76448A;
+    }
+    75% {
+    color: #6C3483;
+    }
+    100% {
+    color: #21618C;
+    }
+}*/
