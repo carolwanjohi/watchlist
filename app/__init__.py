@@ -1,24 +1,32 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from .config import DevConfig
+from config import config_options
 
-# Initialising application
-''' 
-    Pass instance_relative_config to connect to instace/
-'''
-app = Flask(__name__,instance_relative_config = True)
- 
-# Setting up configuration
-app.config.from_object(DevConfig)
+bootstrap = Bootstrap()
 
-''' 
-    Connect to config.py file
-    All its contents are appended to app.config
-'''
-app.config.from_pyfile("config.py")
+def create_app(config_name):
+    '''
+    Function that takes configuration setting key as an argument
+    
+    Args:
+        config_name : name of the configuration to be used
+    '''
 
-# Initialising Flask extensions
-bootstrap = Bootstrap(app)
+    # Initialising application
+    app = Flask(__name__)
 
-from app import views
-from app import error
+    # Creating the app configurations
+    app.config.from_object(config_options[config_name])
+
+    # Initialising flask extensions
+    bootstrap.init_app(app)
+
+    # Reqistering the blueprint
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    # Setting config
+    from .requests import configure_request
+    configure_request(app)
+
+    return app

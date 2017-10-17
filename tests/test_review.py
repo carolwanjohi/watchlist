@@ -1,7 +1,5 @@
 import unittest
-from models import review
-
-Review = review.Review
+from app.models import Review
 
 class ReviewTest(unittest.TestCase):
     '''
@@ -55,12 +53,3 @@ class ReviewTest(unittest.TestCase):
 
         # self.assertEqual( len(gotten_reviews), 1)
         self.assertTrue( len(gotten_reviews) == 1)
-
-
-
-
-
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
