@@ -10,7 +10,7 @@ class UserTest(unittest.TestCase):
         '''
         Test case to ascertain when a password is being hashed and pass_secure contains a value
         '''
-        self.assertTrue(self.new_user.pass_secure is not None)
+        self.assertTrue(self.new_user.password_hash is not None)
 
     def test_no_access_password(self):
         '''

@@ -3,7 +3,7 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm
 from ..models import Review
-
+from flask_login import login_required
 
 # Review = review.Review
 
@@ -54,6 +54,7 @@ def search(movie_name):
     return render_template('search.html', movies = searched_movies)
 
 @main.route('/movie/review/new/<int:id>', methods=['GET','POST'])
+@login_required
 def new_review(id):
 
     '''
