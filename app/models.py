@@ -73,6 +73,12 @@ class User(UserMixin,db.Model):
     # role_id column for a User's role
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
+    # bio column for a user's biography
+    bio = db.Column(db.String(255))
+
+    # profile_pic_path column for a user's profile picture
+    profile_pic_path = db.Column(db.String())
+
     # password_hash column for passwords
     password_hash = db.Column(db.String(255))
 
