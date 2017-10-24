@@ -4,7 +4,7 @@ from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
 from flask_login import login_required
-from .. import db
+from .. import db,photos
 
 # Review = review.Review
 
@@ -92,7 +92,7 @@ def profile(uname):
 def update_profile(uname):
 
     '''
-    View function that takes in a username and renders an update profile form for a user
+    View function to display an update bio form
     '''
     user = User.query.filter_by(username=uname).first()
 
@@ -111,6 +111,24 @@ def update_profile(uname):
 
     title=f'Update {uname}\'s profile'
     return render_template('profile/update.html', form=form, title=title)
+
+@main.route('/user/<uname>/update/pic', methods=['GET','POST'])
+@login_required
+def update_pic(uname):
+
+    '''
+    View function to display an update profile picture form
+    '''
+    user = User.query.filter_by(username=uname).first()
+
+    if 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        path = f'photos/{filename}'
+        user.profile_pic_path = path
+        db.session.commit()
+    return redirect(url_for('main.profile',uname=uname))
+
+
 
 
 
