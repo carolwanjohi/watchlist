@@ -19,7 +19,7 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     SUBJECT_PREFIX = 'Watchlist'
-    SENDER_EMAIL = 'wanjohi.carol57@gmail.com'
+    SENDER_EMAIL = 'wanjohi.carol75@gmail.com'
 
     @staticmethod
     def init_app(app):
