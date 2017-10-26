@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+<!-- Content block -->
+{% block content %}
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-sm-4">
+
+                <img src="{{review.image_path}}" alt="{{review.movie_title}}" class="img-responsive">
+
+            </div>
+
+            <div class="col-sm-8">
+                <!-- Prevent Jinja from formating our html -->
+                {{format_review | safe}}
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
