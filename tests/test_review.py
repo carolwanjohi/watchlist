@@ -1,5 +1,6 @@
 import unittest
-from app.models import Review
+from app.models import Review,User
+from app import db
 
 class ReviewTest(unittest.TestCase):
     '''
@@ -10,26 +11,30 @@ class ReviewTest(unittest.TestCase):
         '''
         Set up method that will run before every Test
         '''
-        
-        self.new_review = Review(12345,'Review for movies',"https://image.tmdb.org/t/p/w500/jdjdjdjn",'This movie is the best thing since sliced bread')
+        self.user_James = User( username = "James", password = "potato", email = "james@ms.com" )
+
+        self.new_review = Review(movie_id = 12345, movie_title = 'Review for movies', image_path = "https://image.tmdb.org/t/p/w500/jdjdjdjn", movie_review = 'This movie is the best thing since sliced bread', user = self.user_James)
 
     def tearDown(self):
         '''
-        Using clear_reviews method to delete reviews from all_reviews list
+        Using query.delete to delete elements in the database after each test
         '''
-        Review.clear_reviews()
+        Review.query.delete()
+        User.query.delete()
 
     def test_instance(self):
         self.assertTrue( isinstance( self.new_review, Review) )
 
-    def test_init(self):
+    def test_check_instance_variables(self):
         '''
         Test initialisation of Review class
         '''
         self.assertEqual( self.new_review.movie_id, 12345)
-        self.assertEqual( self.new_review.title, 'Review for movies')
-        self.assertEqual( self.new_review.imageurl, "https://image.tmdb.org/t/p/w500/jdjdjdjn")
-        self.assertEqual( self.new_review.review, 'This movie is the best thing since sliced bread')
+        self.assertEqual( self.new_review.movie_title, 'Review for movies')
+        self.assertEqual( self.new_review.image_path, "https://image.tmdb.org/t/p/w500/jdjdjdjn")
+        self.assertEqual( self.new_review.movie_review, 'This movie is the best thing since sliced bread')
+        self.assertEqual( self.new_review.user, self.user_James)
+
 
     def test_save_review(self):
         '''
@@ -37,8 +42,8 @@ class ReviewTest(unittest.TestCase):
         '''
         self.new_review.save_review()
 
-        # self.assertEqual( len(Review.all_reviews) , 1)
-        self.assertTrue( len(Review.all_reviews) > 0)
+        # self.assertEqual( len(Review.query.all()) , 1)
+        self.assertTrue( len(Review.query.all()) > 0)
 
     def test_get_reviews(self):
         '''
@@ -46,10 +51,15 @@ class ReviewTest(unittest.TestCase):
         '''
         self.new_review.save_review()
 
-        test_review = Review(67890, 'Review for Why', "https://image.tmdb.org/t/p/w500/ghighighi", 'The aswesome Why on a journey')
+        test_review = Review(movie_id = 67890, movie_title = 'Review for Why',  image_path = "https://image.tmdb.org/t/p/w500/ghighighi", movie_review = 'The aswesome Why on a journey', user = self.user_James)
         test_review.save_review()
 
         gotten_reviews = Review.get_reviews(67890)
 
         # self.assertEqual( len(gotten_reviews), 1)
         self.assertTrue( len(gotten_reviews) == 1)
+
+
+
+
+

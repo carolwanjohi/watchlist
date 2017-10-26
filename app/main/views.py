@@ -3,7 +3,7 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
-from flask_login import login_required
+from flask_login import login_required,current_user
 from .. import db,photos
 
 # Review = review.Review
@@ -67,7 +67,11 @@ def new_review(id):
     if form.validate_on_submit():
         title = form.title.data
         review = form.review.data
-        new_review = Review(movie.id, title, movie.poster, review)
+
+        # Create Review Instance
+        new_review = Review( movie_id = movie.id, movie_title = title, image_path = movie.poster, movie_review = review, user = current_user)
+
+        # Save Review
         new_review.save_review()
         return redirect(url_for('.movie', id = movie.id))
 
@@ -80,12 +84,12 @@ def profile(uname):
     '''
     View function to display a user's profile
     '''
-    user = User.query.filter_by(username=uname).first()
+    user = User.query.filter_by(username = uname).first()
 
     if user is None:
         abort(404)
 
-    return render_template('profile/profile.html', user=user)
+    return render_template('profile/profile.html', user = user)
 
 @main.route('/user/<uname>/update', methods=['GET','POST'])
 @login_required
@@ -94,7 +98,7 @@ def update_profile(uname):
     '''
     View function to display an update bio form
     '''
-    user = User.query.filter_by(username=uname).first()
+    user = User.query.filter_by(username = uname).first()
 
     if user is None:
         abort(404)
@@ -107,10 +111,10 @@ def update_profile(uname):
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for('.profile', uname=user.username))
+        return redirect(url_for('.profile', uname = user.username))
 
     title=f'Update {uname}\'s profile'
-    return render_template('profile/update.html', form=form, title=title)
+    return render_template('profile/update.html', form = form, title = title)
 
 @main.route('/user/<uname>/update/pic', methods=['GET','POST'])
 @login_required
@@ -119,14 +123,14 @@ def update_pic(uname):
     '''
     View function to display an update profile picture form
     '''
-    user = User.query.filter_by(username=uname).first()
+    user = User.query.filter_by(username = uname).first()
 
     if 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         path = f'photos/{filename}'
         user.profile_pic_path = path
         db.session.commit()
-    return redirect(url_for('main.profile',uname=uname))
+    return redirect(url_for('main.profile',uname = uname))
 
 
 

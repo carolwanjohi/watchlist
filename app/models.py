@@ -2,6 +2,7 @@ from . import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from . import login_manager
+from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,39 +25,57 @@ class Movie:
         self.vote_average = vote_average
         self.vote_count = vote_count
 
-class Review:
+class Review(db.Model):
     '''
-    Review class to define a movie review
+    Review class to define a movie review in the database
     '''
 
-    # Empty reviews list
-    all_reviews = []
+    # Name of the rable
+    __tablename__ = 'reviews'
 
-    def __init__(self, movie_id, title, imageurl, review):
-        self.movie_id = movie_id
-        self.title = title
-        self.imageurl = imageurl
-        self.review = review
+    # id column that is the primary key
+    id = db.Column(db.Integer, primary_key=True)
+
+    # movie_id column for a movie's id
+    movie_id = db.Column(db.Integer)
+
+    # movie_title column for a movie's title
+    movie_title = db.Column(db.String)
+
+    # image_path column for a movie's poster
+    image_path = db.Column(db.String)
+
+    # movie_review column for a movie's review
+    movie_review = db.Column(db.String)
+
+    # posted column for a review's date 
+    posted = db.Column(db.Time, default=datetime.utcnow())
+
+    # user_id column for linking a review to a specific user
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def save_review(self):
-        Review.all_reviews.append(self)
-
-    @classmethod
-    def clear_reviews(cls):
-        Review.all_reviews.clear()
+        '''
+        Save instance of Review model to the session and commit it to the database
+        '''
+        db.session.add(self)
+        db.session.commit()
 
     @classmethod
     def get_reviews(cls,id):
-        response = []
+        '''
+        Function to retrive reveiws for a specific movie
 
-        for review in cls.all_reviews:
-            if review.movie_id == id:
-                response.append(review)
-
-        return response
-
+        Args:
+            id : movie id
+        '''
+        reviews = Review.query.filter_by(movie_id=id).all()
+        return reviews
 
 class User(UserMixin,db.Model):
+    '''
+    User class to define a user in the database
+    '''
 
     # Name of the table
     __tablename__ = 'users'
@@ -82,6 +101,9 @@ class User(UserMixin,db.Model):
     # password_hash column for passwords
     password_hash = db.Column(db.String(255))
 
+    # virtual column to connect with foriegn key
+    reviews = db.relationship('Review', backref='user', lazy='dynamic')
+
     @property
     def password(self):
         raise AttributeError('You cannot read the password attribute')
@@ -99,6 +121,9 @@ class User(UserMixin,db.Model):
 
 
 class Role(db.Model):
+    '''
+    Role class to define a User's role in the database
+    '''
 
     # Name od the table
     __tablename__ = 'roles'
